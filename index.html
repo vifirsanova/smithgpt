@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmithGPT</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <main class="chat-container" role="main">
+        <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
+            <div class="message bot-message" role="status">Ask me anything!</div>
+        </div>
+        
+        <form class="input-area" id="chat-form" role="form">
+            <textarea 
+                class="input-field" 
+                id="user-input" 
+                placeholder="Enter your message..." 
+                rows="1"
+                aria-label="Type your message"
+                required
+            ></textarea>
+            
+            <div class="button-group">
+                <button type="submit" class="send-button" aria-label="Send message">
+                    
+                </button>
+                <div class="file-input-wrapper">
+                    <button type="button" class="file-input-button" aria-label="Attach file">
+                        [FILE]
+                    </button>
+                    <input type="file" class="file-input" id="file-input" aria-hidden="true" tabindex="-1">
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script src="static/script.js"></script>
+</body>
+</html>

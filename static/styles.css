@@ -66,6 +66,13 @@ body {
     background-color: var(--input-bg);
     border-radius: 18px;
     align-items: center;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 48px);
+    max-width: 1000px;
+    box-sizing: border-box;
 }
 
 .input-field {

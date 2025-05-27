@@ -86,7 +86,7 @@ def create_messages(message):
             },
             {
                 "role": "user",
-                "content": [{"type": "text", "text": str(message)},]
+                "content": [{"type": "text", "text": message},]
             },
         ],
     ]
@@ -103,8 +103,7 @@ def create_messages(message):
         outputs = model.generate(**inputs, temperature=0.7, top_k=50, max_new_tokens=2048)
 
     outputs = tokenizer.batch_decode(outputs)
-
-    return re.findall(r'<start_of_turn>(.*?)<end_of_turn>', outputs[0], re.DOTALL)[1]
+    return str(re.findall(r'<start_of_turn>(.*?)<end_of_turn>', outputs[0], re.DOTALL)[1])
 
 @app.route('/')
 def index():
@@ -122,10 +121,8 @@ def upload_file():
     if file and allowed_file(file.filename):
         try:
             content = extract_text_from_file(file.stream, file.filename)
-            messages = create_messages(content)
-            return jsonify({
-                'response': messages
-            })
+            content = create_messages(content)
+            return jsonify({'content': content})
         except Exception as e:
             return jsonify({'error': f"Processing error: {str(e)}"}), 500
     else:

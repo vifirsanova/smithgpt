@@ -48,3 +48,4 @@ The app works best with NVIDIA GPU. The app was tested on GeForce RTX 4070.
 - New features: API integration for documentation analysis
 - Chat history
 - Multimodality
+- Streaming

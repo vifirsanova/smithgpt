@@ -38,3 +38,13 @@ Graphical user interface supports both file uploading and input text message ana
 
 ![graphical user interface](https://github.com/user-attachments/assets/4dce4f6a-7145-40c3-bd9d-b821d13aeada)
 
+## Requirements  
+
+The app works best with NVIDIA GPU. The app was tested on GeForce RTX 4070.
+
+## Perspectives 
+
+- AMD GPU integration
+- New features: API integration for documentation analysis
+- Chat history
+- Multimodality

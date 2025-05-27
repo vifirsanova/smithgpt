@@ -49,3 +49,4 @@ The app works best with NVIDIA GPU. The app was tested on GeForce RTX 4070.
 - Chat history
 - Multimodality
 - Streaming
+- Calculate token*time ratio, max input length, efficiency on different GPUs

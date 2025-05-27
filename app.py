@@ -7,11 +7,20 @@ import torch
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from transformers import AutoTokenizer, BitsAndBytesConfig, Gemma3ForCausalLM
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--quantization', type=lambda x: x.lower() == 'true', default=False)
+args = parser.parse_args()
+
 model_id = "google/gemma-3-1b-it"
-quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+
+quantization_config = BitsAndBytesConfig(load_in_8bit=True) if args.quantization == True else None
+
 model = Gemma3ForCausalLM.from_pretrained(
     model_id, quantization_config=quantization_config
 ).eval()
+
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 app = Flask(__name__)

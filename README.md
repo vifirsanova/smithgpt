@@ -13,15 +13,41 @@ An LLM-based assistant that can review code and suggest improvements on your doc
 
 - Full in-memory processing (no files saved to disk)
 - 16MB max file size limit
+- Bug reports are provided in the user interface
+
+![bug report example](https://github.com/user-attachments/assets/43eb12ca-2e64-4218-a24a-fef376365ffe)
+*Bug report example*
+
+**Limitations**: the model works best with documents containing < 100 lines.
 
 ## Quick Start
 
-1. Install requirements:
+1. Install requirements and run the app:
    ```bash
    chmod +x run.sh
-   ./run.sh
+   ./run.sh --quantization True
    ```
-
+   You can apply LLM quantization by setting `--quantization True` and choose your hardware by setting `--gpu` to either `NVIDIA`, `AMD` or `None` if you want to run the app with CPU.
 2. Access the web interface at http://localhost:5000
+3. Type your code in the chat interface, or upload files for code review and analysis
 
-3. Type messages in the chat interface, or upload files for code review and analysis
+## Examples
+
+Graphical user interface supports both file uploading and input text message analysis. No additional prompts needed! 
+
+![graphical user interface](https://github.com/user-attachments/assets/b07939bf-650d-4e92-9078-2851fa022176)
+
+![graphical user interface](https://github.com/user-attachments/assets/4dce4f6a-7145-40c3-bd9d-b821d13aeada)
+
+## Requirements  
+
+The app works best with NVIDIA GPU. The app was tested on GeForce RTX 4070.
+
+## Perspectives 
+
+- New features: API integration for documentation analysis
+- Chat history
+- Multimodality
+- Streaming
+- Calculate token*time ratio, max input length, efficiency on different GPUs
+

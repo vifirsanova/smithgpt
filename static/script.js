@@ -93,13 +93,48 @@ document.addEventListener('DOMContentLoaded', function() {
         messageDiv.classList.add('message');
         messageDiv.classList.add(sender === 'bot' ? 'bot-message' : 'user-message');
         
+        const messageContent = document.createElement('div');
+        messageContent.style.display = 'flex';
+        messageContent.style.flexDirection = 'column';
+        messageContent.style.gap = '8px';
+        
         const formattedText = document.createElement('pre');
         formattedText.style.margin = '0';
         formattedText.style.fontFamily = 'inherit';
         formattedText.style.whiteSpace = 'pre-wrap';
         formattedText.textContent = text;
         
-        messageDiv.appendChild(formattedText);
+        messageContent.appendChild(formattedText);
+        
+        if (sender === 'bot') {
+            const copyButton = document.createElement('button');
+            copyButton.textContent = 'Copy';
+            copyButton.style.alignSelf = 'flex-end';
+            copyButton.style.padding = '4px 8px';
+            copyButton.style.background = 'var(--input-bg)';
+            copyButton.style.color = 'var(--text-color)';
+            copyButton.style.border = '0px';
+            copyButton.style.cursor = 'pointer';
+            copyButton.style.fontSize = '12px';
+            copyButton.style.fontFamily = 'inherit';
+            
+            copyButton.addEventListener('click', function() {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        copyButton.textContent = 'Copied!';
+                        setTimeout(() => {
+                            copyButton.textContent = 'Copy';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+            });
+            
+            messageContent.appendChild(copyButton);
+        }
+        
+        messageDiv.appendChild(messageContent);
         messageDiv.setAttribute('role', sender === 'bot' ? 'status' : 'log');
         
         chatMessages.appendChild(messageDiv);

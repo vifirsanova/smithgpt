@@ -103,7 +103,7 @@ def create_messages(message):
         outputs = model.generate(**inputs, temperature=0.7, top_k=50, max_new_tokens=2048)
 
     outputs = tokenizer.batch_decode(outputs)
-    return str(re.findall(r'<start_of_turn>(.*?)<end_of_turn>', outputs[0], re.DOTALL)[1])
+    return str(re.findall(r'<start_of_turn>(.*?)<end_of_turn>', outputs[0], re.DOTALL)[1])[6:]
 
 @app.route('/')
 def index():

@@ -1,7 +1,18 @@
 from flask import Flask, render_template, request, jsonify
-import os, io, docx, PyPDF2, json, chardet, toml
+import os, io, docx, PyPDF2, json, chardet, toml, re
 from werkzeug.utils import secure_filename
 from pathlib import Path
+
+import torch
+from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
+from transformers import AutoTokenizer, BitsAndBytesConfig, Gemma3ForCausalLM
+
+model_id = "google/gemma-3-1b-it"
+quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+model = Gemma3ForCausalLM.from_pretrained(
+    model_id, quantization_config=quantization_config
+).eval()
+tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 app = Flask(__name__)
 
@@ -66,6 +77,35 @@ def extract_text_from_file(file_stream, filename):
     except Exception as e:
         return f"Error extracting text: {str(e)}"
 
+def create_messages(message):
+    messages = [
+        [
+            {
+                "role": "system",
+                "content": [{"type": "text", "text": "You are coding assisstant. Review the provided code or suggest improvements on the provided documentation:"},]
+            },
+            {
+                "role": "user",
+                "content": [{"type": "text", "text": str(message)},]
+            },
+        ],
+    ]
+
+    inputs = tokenizer.apply_chat_template(
+        messages,
+        add_generation_prompt=True,
+        tokenize=True,
+        return_dict=True,
+        return_tensors="pt",
+    ).to(model.device)
+
+    with torch.inference_mode():
+        outputs = model.generate(**inputs, temperature=0.7, top_k=50, max_new_tokens=2048)
+
+    outputs = tokenizer.batch_decode(outputs)
+
+    return re.findall(r'<start_of_turn>(.*?)<end_of_turn>', outputs[0], re.DOTALL)[1]
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -82,9 +122,9 @@ def upload_file():
     if file and allowed_file(file.filename):
         try:
             content = extract_text_from_file(file.stream, file.filename)
+            messages = create_messages(content)
             return jsonify({
-                'filename': secure_filename(file.filename),
-                'content': content
+                'response': messages
             })
         except Exception as e:
             return jsonify({'error': f"Processing error: {str(e)}"}), 500
@@ -99,8 +139,10 @@ def send_message():
     if not message:
         return jsonify({'error': 'Empty message'}), 400
     
+    messages = create_messages(message)
+
     return jsonify({
-        'response': f"I received your message: '{message}'. This is a placeholder response."
+        'response': messages
     })
 
 if __name__ == '__main__':

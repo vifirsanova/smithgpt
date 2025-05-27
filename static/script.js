@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.error) {
                     addMessage(`Error: ${data.error}`, 'bot');
                 } else {
-                    addMessage(`File content (${data.filename}):\n${data.content}`, 'bot');
+                    addMessage(`${data.content}`, 'bot');
                 }
             })
             .catch(error => {

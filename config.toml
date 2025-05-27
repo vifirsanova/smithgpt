@@ -1,0 +1,2 @@
+max_content_length = 16777216  # 16MB
+extensions = ["txt", "md", "py", "js", "java", "c", "cpp", "h", "hpp", "cs", "go", "rs", "php", "rb", "swift", "kt", "scala", "sh", "pl", "lua", "html", "css", "scss", "less", "json", "xml", "yaml", "yml", "ini", "conf", "toml", "env", "csv", "tsv", "ipynb", "pdf", "doc", "docx"]

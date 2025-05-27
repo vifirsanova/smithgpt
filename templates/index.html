@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmithGPT</title>
-    <link rel="stylesheet" href="static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <main class="chat-container" role="main">
         <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
-            <div class="message bot-message" role="status">Ask me anything!</div>
+            <div class="message bot-message" role="status">Ask me anything or upload a coding-related file!</div>
         </div>
         
         <form class="input-area" id="chat-form" role="form">
@@ -36,6 +36,6 @@
         </form>
     </main>
 
-    <script src="static/script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

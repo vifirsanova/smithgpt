@@ -32,8 +32,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     fileInput.addEventListener('change', function() {
         if (this.files && this.files[0]) {
-            addMessage(`[Attachment: ${this.files[0].name}]`, 'user');
-            this.value = '';        }
+            const file = this.files[0];
+            addMessage(`[Uploading: ${file.name}]`, 'user');
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    addMessage(`Error: ${data.error}`, 'bot');
+                } else {
+                    addMessage(`File content (${data.filename}):\n${data.content}`, 'bot');
+                }
+            })
+            .catch(error => {
+                addMessage(`Upload failed: ${error.message}`, 'bot');
+            });
+            
+            this.value = '';
+        }
     });
     
     function sendMessage() {
@@ -45,9 +67,24 @@ document.addEventListener('DOMContentLoaded', function() {
             userInput.style.height = 'auto';
             alignInputWithButtons();
             
-            setTimeout(() => {
-                addMessage("Sorry, but this is just a placeholder. Miss Vector didn't finish my backend yet..", 'bot');
-            }, 800);
+            fetch('/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    addMessage(`Error: ${data.error}`, 'bot');
+                } else {
+                    addMessage(data.response, 'bot');
+                }
+            })
+            .catch(error => {
+                addMessage("Sorry, there was an error processing your message.", 'bot');
+            });
         }
     }
     
